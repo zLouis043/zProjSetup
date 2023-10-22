@@ -8,18 +8,18 @@ for %%x in (%*) do (
 )
 
 if !argVec[1]!==--help (
-    echo [USAGE] ./crproj ^<filepath^> ^<project_name^> [^<name_of_additional_files^>]
+    echo [USAGE] ./zprojcr ^<filepath^> ^<project_name^> [^<name_of_additional_files^>]
     EXIT /B
 ) 
 
 if !argVec[1]!==--h (
-    echo [USAGE] ./crproj ^<filepath^> ^<project_name^> [^<name_of_additional_files^>]
+    echo [USAGE] ./zprojcr ^<filepath^> ^<project_name^> [^<name_of_additional_files^>]
     EXIT /B
 ) 
 
 if %argCount% lss 2 (
     echo [ERROR] Not enough arguments!
-    echo [USAGE] ./crproj ^<filepath^> ^<project_name^> [^<name_of_additional_files^>] 
+    echo [USAGE] ./zprojcr ^<filepath^> ^<project_name^> [^<name_of_additional_files^>] 
     EXIT /B
 )
 
@@ -35,7 +35,8 @@ mkdir src
 if %argCount% gtr 2 (
     cd src 
     for /l %%i in (3, 1, %argCount%) do (
-            echo #include "!argVec[%%i]!.h" > \%proj_location%\src\!argVec[%%i]!.c 
+            echo #include ^<stdio.h^> > \%proj_location%\src\!argVec[%%i]!.c 
+            echo #include "!argVec[%%i]!.h" >>\%proj_location%\src\!argVec[%%i]!.c 
             echo #pragma once> \%proj_location%\src\!argVec[%%i]!.h
     )
 
@@ -76,15 +77,34 @@ if %argCount% GTR 1 (
    echo add_executable(${PROJECT_NAME} main.c^) >> \%proj_location%\CMakeLists.txt
 )
 
-> \%proj_location%\bar.bat (
+> \%proj_location%\build.bat (
 for %%I in (
+        "@echo off"
         "cls"
         "cd bin"
         "echo [INFO] Building the program: "
         "make"
+        "cd .."
+    ) do echo %%~I
+)
+
+> \%proj_location%\run.bat (
+for %%I in (
+        "@echo off"
+        "cls"
+        "cd bin"
         "echo [INFO] Executing the program: "
         "call %proj_name%.exe"
         "cd .."
+    ) do echo %%~I
+)
+
+> \%proj_location%\bar.bat (
+for %%I in (
+        "@echo off"
+        "cls"
+        "call build.bat"
+        "call run.bat"
     ) do echo %%~I
 )
 
