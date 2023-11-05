@@ -1,6 +1,8 @@
 @echo off
 setlocal enabledelayedexpansion
 
+echo [[92mINFO[0m] RUNNING THE ZPROJECT SETUP BATCH BY IN_LOUIZ
+
 set argCount=0
 for %%x in (%*) do (
    set /A argCount+=1
@@ -8,23 +10,43 @@ for %%x in (%*) do (
 )
 
 if !argVec[1]!==--help (
-    echo [USAGE] ./zprojcr ^<filepath^> ^<project_name^> [^<name_of_additional_files^>]
+    echo [[92mUSAGE[0m] Usage: 
+    echo [[92mUSAGE[0m] ./[33mzprojcr[0m [[36mvscode[0m] ^<[36mfilepath[0m^> ^<[36mproject_name[0m^> [^<[36mname_of_additional_files[0m^>]
+    echo [[92mUSAGE[0m]    - [36mvscode flag[0m  = Used to specify whenever the project will be opened in vscode automatically or not.
+    echo [[92mUSAGE[0m]    - [36mfilepath[0m = The path where the project will be created.
+    echo [[92mUSAGE[0m]    - [36mproject_name[0m = The name of the project.
+    echo [[92mUSAGE[0m]    - [36mname_of_additional_files[0m = The name of other .c and .h modules that will be added to the project in the src folder.
     EXIT /B
 ) 
 
 if !argVec[1]!==--h (
-    echo [USAGE] ./zprojcr ^<filepath^> ^<project_name^> [^<name_of_additional_files^>]
+    echo [[92mUSAGE[0m] Usage: 
+    echo [[92mUSAGE[0m] ./[33mzprojcr[0m [[36mvscode[0m] ^<[36mfilepath[0m^> ^<[36mproject_name[0m^> [^<[36mname_of_additional_files[0m^>]
+    echo [[92mUSAGE[0m]    - [36mvscode flag[0m  = Used to specify whenever the project will be opened in vscode automatically or not.
+    echo [[92mUSAGE[0m]    - [36mfilepath[0m = The path where the project will be created.
+    echo [[92mUSAGE[0m]    - [36mproject_name[0m = The name of the project.
+    echo [[92mUSAGE[0m]    - [36mname_of_additional_files[0m = The name of other .c and .h modules that will be added to the project in the src folder.
     EXIT /B
 ) 
 
 if %argCount% lss 2 (
-    echo [ERROR] Not enough arguments!
-    echo [USAGE] ./zprojcr ^<filepath^> ^<project_name^> [^<name_of_additional_files^>] 
+    echo [101mERROR[0m: [31mNot enough arguments![0m
+    echo [[92mUSAGE[0m] Usage: 
+    echo [[92mUSAGE[0m] ./[33mzprojcr[0m [[36mvscode[0m] ^<[36mfilepath[0m^> ^<[36mproject_name[0m^> [^<[36mname_of_additional_files[0m^>]
+    echo [[92mUSAGE[0m]    - [36mvscode flag[0m  = Used to specify whenever the project will be opened in vscode automatically or not.
+    echo [[92mUSAGE[0m]    - [36mfilepath[0m = The path where the project will be created.
+    echo [[92mUSAGE[0m]    - [36mproject_name[0m = The name of the project.
+    echo [[92mUSAGE[0m]    - [36mname_of_additional_files[0m = The name of other .c and .h modules that will be added to the project in the src folder.
     EXIT /B
 )
 
-set "proj_location=!argVec[1]!"
-set "proj_name=!argVec[2]!"
+if !argVec[1]!==vscode (
+    set "proj_location=!argVec[2]!"
+    set "proj_name=!argVec[3]!"
+) else (
+    set "proj_location=!argVec[1]!"
+    set "proj_name=!argVec[2]!"
+)
 
 cls
 mkdir %proj_location%
@@ -34,7 +56,7 @@ mkdir src
 
 if %argCount% gtr 2 (
     cd src 
-    for /l %%i in (3, 1, %argCount%) do (
+    for /l %%i in (4, 1, %argCount%) do (
             echo #include ^<stdio.h^> > \%proj_location%\src\!argVec[%%i]!.c 
             echo #include "!argVec[%%i]!.h" >>\%proj_location%\src\!argVec[%%i]!.c 
             echo #pragma once> \%proj_location%\src\!argVec[%%i]!.h
@@ -112,4 +134,9 @@ cd bin
 call cmake .. -G "MinGW Makefiles"
 cd ..
 call bar.bat
+
+if !argVec[1]!==vscode (
+    code .
+)
+
 cd ..
