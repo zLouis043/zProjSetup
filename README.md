@@ -14,7 +14,7 @@ To run the program:
 
 ```console
 
-$ ./zprojcr <filepath> <project_name> [<name_of_additional_files>]
+$ ./zprojcr [vscode] <filepath> <project_name> [<name_of_additional_files>]
 
 ```
 
@@ -25,3 +25,7 @@ This will create:
 - the bin folder
 
 And will generate the cmake files and than it will build the project for the first time.
+
+If you add also the vscode flag it will also open the project in vscode once it is also setup correctly.
+
+## NOTE : YOU WILL NEED CMAKE TO BUILD THE PROJECT 
