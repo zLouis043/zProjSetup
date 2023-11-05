@@ -26,6 +26,4 @@ This will create:
 
 And will generate the cmake files and than it will build the project for the first time.
 
-If you add also the vscode flag it will also open the project in vscode once it is also setup correctly.
-
-## NOTE : YOU WILL NEED CMAKE TO BUILD THE PROJECT 
+If you add also the vscode flag it will also open the project in vscode once it is also setup correctly. 
